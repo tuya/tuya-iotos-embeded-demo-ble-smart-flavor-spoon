@@ -6,7 +6,7 @@
 
 ## Introduction 
 
-This demo is based on the Tuya Smart Cloud Platform, Tuya  Smart APP, IoTOS Embeded Ble SDK, and uses the Tuya BLE series module to develop an intelligent barilla  spoon demo. features include: four basic flavors: sour, sweet, bitter, and salty as well as user-defined flavors, power outage with network, and power alarm.
+This demo is based on the Tuya Smart Cloud Platform, Tuya  Smart APP, IoTOS Embeded Ble SDK, and uses the Tuya BLE series module to develop an intelligent flavor  spoon demo. features include: four basic flavors: sour, sweet, bitter, and salty as well as user-defined flavors, power outage with network, and power alarm.
 
 <br>
 
