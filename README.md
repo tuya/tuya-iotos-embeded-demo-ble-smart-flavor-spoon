@@ -1,153 +1,163 @@
-# Tuya IoTOS Embeded Demo BLE Flavor Spoon
+# Tuya IoTOS Embedded Bluetooth LE Flavor-Elevating Spoon
 
-[English](./README.md) | [中文](./README_zh.md) 
-
-<br>
-
-## Introduction 
-
-This demo is based on the Tuya Smart Cloud Platform, Tuya  Smart APP, IoTOS Embeded Ble SDK, and uses the Tuya BLE series module to develop an intelligent flavor  spoon demo. features include: four basic flavors: sour, sweet, bitter, and salty as well as user-defined flavors, power outage with network, and power alarm.
+[English](./README.md) | [中文](./README_zh.md)
 
 <br>
 
+## Introduction
 
-## Quick start 
+In this demo, we will show you how to develop a smart spoon that can alter flavors and make food taste better. Based on the [Tuya IoT Platform](https://iot.tuya.com/), we use Tuya's Bluetooth LE module, SDK, and the Tuya Smart app to connect this spoon to the cloud. 
 
-### Development environment build 
-
-- IDE to be installed according to the original chip SDK requirements.
-- The Tuya BLE SDK Demo Project can be downloaded from the table below. Please refer to the `README.md` file under each branch to complete the project import.
-
-|   Platform   |  Model   |                       Download Address                       |
-| :----------: | :------: | :----------------------------------------------------------: |
-|    Nordic    | nrf52832 | [tuya_ble_sdk_Demo_Project_nrf52832.git](https://github.com/TuyaInc/tuya_ble_sdk_Demo_Project_nrf52832.git) |
-|   Realtek    | RTL8762C | [tuya_ble_sdk_Demo_Project_rtl8762c.git](https://github.com/TuyaInc/tuya_ble_sdk_Demo_Project_rtl8762c.git) |
-|    Telink    | TLSR825x | [tuya_ble_sdk_Demo_Project_tlsr8253.git](https://github.com/TuyaInc/tuya_ble_sdk_Demo_Project_tlsr8253.git) |
-| Silicon Labs |   BG21   |              In the planning stages, stay tuned              |
-|    Beken     | BK3431Q  | [Tuya_ble_sdk_demo_project_bk3431q.git](https://github.com/TuyaInc/Tuya_ble_sdk_demo_project_bk3431q.git) |
-|    Beken     |  BK3432  | [ tuya_ble_sdk_Demo_Project_bk3432.git](https://github.com/TuyaInc/tuya_ble_sdk_Demo_Project_bk3432.git) |
-|   Cypress    |  Psoc63  | [tuya_ble_sdk_Demo_Project_PSoC63.git](https://github.com/TuyaInc/tuya_ble_sdk_Demo_Project_PSoC63.git) |
+The spoon features: 
+- Four basic flavors, namely sour, sweet, bitter, and salty, as well as custom flavors. 
+- Auto pairing after a restart. 
+- Low battery warning.
 
 <br>
 
-### Compile and burn
+## Get started
 
-- code modifications
+### Set up development environment
 
-  1. Fill in `tuya_ble_app_demo.h` with the PID of the smart product created in the Tuya IoT workbench.
+- Install the integrated development environment (IDE) as per your chip platform.
 
-     ```
-      #define APP_PRODUCT_ID "xxxxxxxx"
-     ```
+- Find the download URL of the Tuya Bluetooth LE SDK Demo Project from the following table. Refer to the `README.md` file under each branch to import the project.
+
+   | Chip platform | Model | Download URL |
+   | :----------: | :------: | :----------------------------------------------------------: |
+   | Nordic | nrf52832 | [tuya_ble_sdk_Demo_Project_nrf52832.git](https://github.com/TuyaInc/tuya_ble_sdk_Demo_Project_nrf52832.git) |
+   | Realtek | RTL8762C | [tuya_ble_sdk_Demo_Project_rtl8762c.git](https://github.com/TuyaInc/tuya_ble_sdk_Demo_Project_rtl8762c.git) |
+   | Telink | TLSR825x | [tuya_ble_sdk_Demo_Project_tlsr8253.git](https://github.com/TuyaInc/tuya_ble_sdk_Demo_Project_tlsr8253.git) |
+   | Silicon Labs | BG21 | Coming soon. |
+   | Beken | BK3431Q | [Tuya_ble_sdk_demo_project_bk3431q.git](https://github.com/TuyaInc/Tuya_ble_sdk_demo_project_bk3431q.git) |
+   | Beken | BK3432 | [tuya_ble_sdk_Demo_Project_bk3432.git](https://github.com/TuyaInc/tuya_ble_sdk_Demo_Project_bk3432.git) |
+   | Cypress | Psoc63 | [tuya_ble_sdk_Demo_Project_PSoC63.git](https://github.com/TuyaInc/tuya_ble_sdk_Demo_Project_PSoC63.git) |
+
+<br>
+
+### Compile and flash
+
+- Edit code
+
+   1. In `tuya_ble_app_demo.h`, specify the PID of the product you have created on the [Tuya IoT Platform](https://iot.tuya.com/).
+
+      ```
+      #define APP_PRODUCT_ID     "xxxxxxxx"
+      ```
   
-     Replace `xxxxxxxx` with the PID.
+      Change `xxxxxxxx` to the PID.
 
-  2. Fill in `tuya_ble_app_demo.c` with the requested authorization code (uuid and auth key).
+   1. In `tuya_ble_app_demo.c`, specify the `authkey` and `UUID`.
 
-     ```
+      ```
       static const char auth_key_test[] = "yyyyyyyy";
       static const char device_id_test[] = "zzzzzzzz";
-     ```
+      ```
   
-     where `yyyyyyyy` is replaced with auth key and `zzzzzzzz` is replaced with uuid.
+      Change `yyyyyyyy` to your authkey and `zzzzzzzz` to your UUID.
 
-- Compile and run the demo code
+- Compile code
 
-  Compile the code and download the firmware to the hardware (you may also need to download the stack and bootloader depending on the chip model you have chosen), watch the logs and use a third party Bluetooth debugging app (e.g. lightBlue for IOS) to scan the device to make sure it is broadcasting properly.
+   Compile the edited code, download the code to the hardware, and run it. You may need to download the stack and bootloader depending on your chip models. Check the logs and use the third-party Bluetooth debugging app (such as LightBlue for iOS) to verify the Bluetooth broadcast.
 
 <br>
 
-### File description 
-
+### File introduction
 ```shell
 └── tuya_ble_app
     ├── inc
-    │   ├── driver
-    │   │   └── tuya_app_opt3004.h
-    │   ├── sdk
-    │   │   ├── custom_app_product_test.h
-    │   │   ├── custom_app_uart_common_handler.h
-    │   │   └── custom_tuya_ble_config.h
-    │   ├── tuya_ble_app_main.h
-    │   └── tuya_dp_process.h
+    │   ├── driver
+    │   │   └── tuya_app_opt3004.h
+    │   ├── sdk
+    │   │   ├── custom_app_product_test.h
+    │   │   ├── custom_app_uart_common_handler.h
+    │   │   └── custom_tuya_ble_config.h
+    │   ├── tuya_ble_app_main.h
+    │   └── tuya_dp_process.h
     └── src
         ├── driver
-        │   └── tuya_app_opt3004.c
+        │   └── tuya_app_opt3004.c
         ├── sdk
-        │   └── tuya_uart_common_handler.c
+        │   └── tuya_uart_common_handler.c
         ├── tuya_ble_app_main.c
         └── tuya_dp_process.c
 ```
 
 <br>
 
-### Application entry
+### Entry to application
+Entry file: `/tuya_ble_app/tuya_ble_app_main.c`.
 
-Entry file: /tuya_ble_app/tuya_ble_app_main.c
-
-- `void tuya_ble_app_init(void)` Performs some necessary initialization of the Tuya IoTOS Embeded Ble SDK, this function is executed only once.
-- `void app_exe()` This function is used to execute the user application code, this function executes in a loop.
++ `void tuya_ble_app_init(void)` is executed to initialize Tuya IoTOS Embedded Bluetooth LE SDK. This function is executed only once.
++ `void app_exe()` is used to execute the application code. It is executed in a loop.
 
 <br>
 
-### DP point related
+### Data point (DP)
 
-|   function name    | tuya_ble_dp_data_report                                      |
-| :----------------: | :----------------------------------------------------------- |
+| Function | tuya_ble_dp_data_report |
+| :------: | :----------------------------------------------------------- |
 | Function prototype | tuya_ble_status_t tuya_ble_dp_data_report(uint8_t *p_data,uint32_t len); |
-| Function overview  | Report dp point data.                                        |
-|     Parameters     | p_data [in] : The dp point data. len[in] : The length of the data, the maximum cannot exceed `TUYA_BLE_REPORT_MAX_DP_DATA_LEN`. |
-|    Return value    | TUYA_BLE_SUCCESS : send success;<br/>TUYA_BLE_ERR_INVALID_PARAM : invalid parameter;<br/>TUYA_BLE_ERR_INVALID_STATE : current status does not support send, e.g. Bluetooth disconnect;<br/>TUYA_BLE _ERR_NO_MEM: memory request failed;<br/>TUYA_BLE_ERR_INVALID_LENGTH: data length error;<br/>TUYA_BLE_ERR_NO_EVENT: other error. |
-|      Remarks       | The Application reports the DP point data to the phone app by calling this function. |
+| Feature overview | Reports DP data. |
+| Parameters | `p_data [in]`: DP data. <br> `len[in]`: data length. It cannot exceed `TUYA_BLE_REPORT_MAX_DP_DATA_LEN`. |
+| Return value | `TUYA_BLE_SUCCESS`: sent successfully. <br/>`TUYA_BLE_ERR_INVALID_PARAM`: invalid parameter. <br/>`TUYA_BLE_ERR_INVALID_STATE`: failed to send data due to the current Bluetooth connection, such as Bluetooth disconnected. <br/>`TUYA_BLE_ERR_NO_MEM`: failed to request memory allocation. <br/>`TUYA_BLE_ERR_INVALID_LENGTH`: data length error. <br/>`TUYA_BLE_ERR_NO_EVENT`: other errors. |
+| Notes | `application` calls this function to send DP data to the mobile app. |
 
-Parameter description.
+Parameter description:
 
-The Tuya Cloud Platform manages data in the form of dp points. Any data generated by the device needs to be abstracted as dp points. A complete dp point data consists of four parts (refer to the relevant introduction on the IoT workbench for details).
+The [Tuya IoT Platform](https://iot.tuya.com/) manages data through DPs. The data generated by any device is abstracted into a DP. DP data consists of four parts, as described below.
 
-- Dp_id: 1 byte, the dp_id serial number registered with the development platform.
+- `Dp_id`: the DP ID of a data point defined on the [Tuya IoT Platform](https://iot.tuya.com/). It is one byte.
 
-- Dp_type: 1 byte, the dp point type.
-     ```c
-     #define DT_RAW    0   //raw type;
-     
-     #define DT_BOOL   1   //boolean type;
-      
-     #define DT_VALUE  2   //numeric type; (whose range is specified at the time of iot platform registration)
-      
-     #define DT_STRING 3   //string type;
-     
-     #define DT_ENUM   4   //enumeration type;
-      
-     #define DT_BITMAP 5   //bitmap type;
-     ```
 
-- Dp_len: 1 byte or two bytes, currently Bluetooth only supports one byte, i.e. up to 255 bytes of data for a single dp point.
+- `Dp_type`: the data type. It is one byte.
 
-- Dp_data: data, dp_len bytes.
+  ```c
+  #define DT_RAW    0   // Raw type.
+  
+  #define DT_BOOL   1   // Boolean type.
+  
+  #define DT_VALUE  2   // Value type. The value range is specified when a DP of value type is created on the Tuya IoT Platform.
+  
+  #define DT_STRING 3   // String type.
+  
+  #define DT_ENUM   4   // Enum type.
+  
+  #define DT_BITMAP 5   // Bitmap type.
+  ```
 
-The data referred to by the parameter p_data of this dp point reporting function must be assembled and reported in the following table format.
+- `Dp_len`: It can be one byte or two bytes. Currently, Bluetooth only supports one byte, so the data of a single DP can be up to 255 bytes.
 
-| Data of Dp point 1 |         |        |         |  ~   | Data of Dp point n |         |        |         |
-| :----------------: | :-----: | :----: | :-----: | :--: | :----------------: | :-----: | :----: | :-----: |
-|         1          |    2    |   3    |   4~    |  ~   |         n          |   n+1   |  n+2   |  n+3~   |
-|       Dp_id        | Dp_type | Dp_len | Dp_data |  ~   |       Dp_id        | Dp_type | Dp_len | Dp_data |
 
-When this function is called, the maximum length of the argument len is `TUYA_BLE_REPORT_MAX_DP_DATA_LEN` (currently 255+3).
+- `Dp_data`: the DP data, with `dp_len` byte(s).
 
-## Related documentation 
 
-+ [BLE SDK Description](https://developer.tuya.com/en/docs/iot/tuya-ble-sdk-user-guide?id=K9h5zc4e5djd9#title-17-tuya%20ble%20sdk%20callback%20event%20%E4%BB%8B%E7%BB%8D) 
-+ [BLE SDK Demo Description](https://developer.tuya.com/cn/docs/iot/device-development/embedded-software-development/module-sdk-development-access/ble-chip-sdk/tuya-ble-sdk-demo-instruction-manual?id=K9gq09szmvy2o) 
-+ [Tuya Demo Center](https://developer.tuya.com/demo)  
+The data that the parameter `p_data` points to must be packaged in the following format for reporting.
+
+| DP 1 data |         |        |         | — | DP n data |         |        |         |
+| :---------: | :-----: | :----: | :-----: | :--- | :---------: | :-----: | :----: | :-----: |
+| 1 | 2 | 3 | 4 and greater | — | n | n+1 | n+2 | n+3 and greater |
+| Dp_id | Dp_type | Dp_len | Dp_data | — | Dp_id | Dp_type | Dp_len | Dp_data |
+
+When this function is called, the maximum data length is `TUYA_BLE_REPORT_MAX_DP_DATA_LEN`, which is `255+3` currently.
+
+
+
+## Reference
+
+- [BLE SDK Guide](https://developer.tuya.com/en/docs/iot/tuya-ble-sdk-user-guide?id=K9h5zc4e5djd9)
+- [BLE SDK Demo Overview](https://developer.tuya.com/en/docs/iot/tuya-ble-sdk-demo-instruction-manual?id=K9gq09szmvy2o)
+- [Tuya Project Hub](https://developer.tuya.com/demo)
 
 <br>
 
-## Technical support 
 
-You can get support for Tuya in the following ways:
+## Technical support
 
-+ Developer Center：https://developer.tuya.com
-+ Help Center：https://support.tuya.com/help
-+ Technical Support Work Order Center：https://service.console.tuya.com 
+You can get support from Tuya with the following methods:
+
+- [Tuya IoT Developer Platform](https://developer.tuya.com/en/)
+- [Help Center](https://support.tuya.com/en/help)
+- [Service & Support](https://service.console.tuya.com)
 
 <br>
